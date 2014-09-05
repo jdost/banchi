@@ -1,0 +1,17 @@
+#!/bin/env python
+
+import sys
+
+from banchi import settings
+print "The database being setup is defined in the `settings.py` file."
+r = raw_input(
+    "Initializing database at {} [Yn]: ".format(settings.DATABASE_URI))
+
+if r == "n":
+    sys.exit(1)
+
+from banchi import setup, db
+app = setup()
+db.create_all(app=app)
+
+# vim: ft=python

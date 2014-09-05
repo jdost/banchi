@@ -9,7 +9,8 @@ else
 endif
 
 init:
-	pip install -r requirements.txt
+	pip install -q -r requirements.txt
+	${PYTHONPATH} python ./bin/setup
 
 unittest:
 	${PYTHONPATH} nosetests ${NOSEOPTS} ./tests/test_*.py
@@ -24,3 +25,6 @@ clean:
 	rm -f ./src/*.pyc
 	rm -f ./src/*/*.pyc
 	rm -f ./tests/*.pyc
+
+serve:
+	${PYTHONPATH} python ./bin/banchi
