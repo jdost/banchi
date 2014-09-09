@@ -5,7 +5,7 @@ from .decorators import datatype, write_operation
 from flask import request
 import httplib
 
-BASE_PATH = '/vlan'
+BASE_PATH = '/vlan/'
 
 
 @app.endpoint(BASE_PATH)
@@ -17,8 +17,8 @@ def vlans():
     return [vlan.__simple__() for vlan in models.Vlan.query.all()]
 
 
-@app.get(BASE_PATH + "/<int:vlan_id>")
-@app.get(BASE_PATH + "/<vlan_name>")
+@app.get(BASE_PATH + "<int:vlan_id>/")
+@app.get(BASE_PATH + "<vlan_name>/")
 @datatype
 def vlan_info(vlan_id=None, vlan_name=None):
     ''' vlan_info - GET /vlan/<vlan id>

@@ -9,7 +9,7 @@ def index():
     return app.endpoints, httplib.OK
 
 
-@app.get('/version')
+@app.get('/version/')
 @datatype
 def get_version():
     return app.__version__

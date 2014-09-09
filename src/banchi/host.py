@@ -5,7 +5,7 @@ from .decorators import datatype, write_operation
 from flask import request
 import httplib
 
-BASE_PATH = '/host'
+BASE_PATH = '/host/'
 
 
 @app.endpoint(BASE_PATH)
@@ -17,7 +17,7 @@ def hosts():
     return [host.__simple__() for host in models.Host.query.all()]
 
 
-@app.get(BASE_PATH + "/<host_name>")
+@app.get(BASE_PATH + "<host_name>/")
 @datatype
 def host_info(host_name=None):
     ''' host_info - GET /host/<host_name>
@@ -44,7 +44,6 @@ def create_host():
     '''
     name = request.form['name']
     vlans = request.form.getlist('vlan')
-    print vlans
 
     if models.Host.query.filter_by(name=name).count():
         return httplib.CONFLICT
