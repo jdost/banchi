@@ -1,6 +1,7 @@
 #!/bin/env python
 
-from banchi import app, settings
+from banchi import setup, settings
+app = setup()
 app.run(**settings.SERVING)
 
 # vim:ft=python

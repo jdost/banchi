@@ -6,5 +6,6 @@ PORT = 9000
 HOST = "0.0.0.0"
 SERVING = {
     "host": HOST,
-    "port": PORT
+    "port": PORT,
+    "debug": DEBUG,
 }
