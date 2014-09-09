@@ -28,12 +28,14 @@ def find():
 def find_ip(ip):
     if not isip(ip):
         return httplib.BAD_REQUEST
-    ip = models.Ip.query.filter_by(number=ip2int(ip)).first()
+    ip = models.Ip.query.filter(
+        models.Ip.number == ip2int(ip)).first()
     return ip.__tuple__()[0] if ip else httplib.NOT_FOUND
 
 
 def find_host(hostname):
     if not len(hostname):
         return httplib.BAD_REQUEST
-    host = models.Host.query.filter_by(name=hostname).first()
+    host = models.Host.query.filter(
+        models.Host.name == hostname).first()
     return host.__full__() if host else httplib.NOT_FOUND

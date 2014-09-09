@@ -25,7 +25,8 @@ def host_info(host_name=None):
     `host_name` parameter, or BAD_REQUEST if no host exists with that name.
     '''
     if host_name:
-        return models.Host.query.filter_by(name=host_name).first().__full__()
+        return models.Host.query.filter(
+            models.Host.name == host_name).first().__full__()
     else:
         return httplib.BAD_REQUEST
 
@@ -45,7 +46,7 @@ def create_host():
     name = request.form['name']
     vlans = request.form.getlist('vlan')
 
-    if models.Host.query.filter_by(name=name).count():
+    if models.Host.query.filter(models.Host.name == name).count():
         return httplib.CONFLICT
 
     host = models.Host(name=name)
@@ -53,7 +54,8 @@ def create_host():
 
     for vlan_id in vlans:
         try:
-            vlan = models.Vlan.query.filter_by(number=int(vlan_id)).first()
+            vlan = models.Vlan.query.filter(
+                models.Vlan.number == int(vlan_id)).first()
             if not vlan:
                 return httplib.BAD_REQUEST
             ip = models.Ip(number=vlan.get_next(), vlan=vlan, host=host)

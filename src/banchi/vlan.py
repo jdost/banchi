@@ -27,9 +27,11 @@ def vlan_info(vlan_id=None, vlan_name=None):
     Returns a detailed listing of the specified vlan
     '''
     if vlan_id:
-        return models.Vlan.query.filter_by(number=vlan_id).first().__full__()
+        return models.Vlan.query.filter(
+            models.Vlan.number == vlan_id).first().__full__()
     elif vlan_name:
-        return models.Vlan.query.filter_by(name=vlan_name).first().__full__()
+        return models.Vlan.query.filter(
+            models.Vlan.name == vlan_name).first().__full__()
     else:
         return httplib.BAD_REQUEST
 
@@ -42,8 +44,8 @@ def create_vlan():
     name = request.form['name']
     mask = request.form['mask']
 
-    if models.Vlan.query.filter_by(number=number).count() or \
-            models.Vlan.query.filter_by(name=name).count():
+    if models.Vlan.query.filter(models.Vlan.number == number).count() or \
+            models.Vlan.query.filter(models.Vlan.name == name).count():
         return httplib.CONFLICT
 
     vlan = models.Vlan(
