@@ -1,6 +1,6 @@
 DEBUG = True
 
-DATABASE_URI = 'sqlite:///:memory:'
+DATABASE_URI = 'sqlite:///banchi.db'
 
 PORT = 9000
 HOST = "0.0.0.0"
