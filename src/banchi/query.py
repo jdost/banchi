@@ -36,6 +36,11 @@ def find_ip(ip):
 def find_host(hostname):
     if not len(hostname):
         return httplib.BAD_REQUEST
-    host = models.Host.query.filter(
-        models.Host.name == hostname).first()
-    return host.__full__() if host else httplib.NOT_FOUND
+    hosts = models.Host.query.filter(
+        models.Host.name.like('%' + hostname + '%'))
+    if hosts.count() == 0:
+        return httplib.NOT_FOUND
+    elif hosts.count() == 1:
+        return hosts.first().__full__()
+
+    return [host.__simple__() for host in hosts.all()]

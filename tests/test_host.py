@@ -25,6 +25,14 @@ class HostTest(TestBase):
                                    headers=self.json_header)
         return response.data, response.status_code
 
+    def query_host(self, host):
+        ''' ::query_host
+        Helper method to query for the host(s) with a given hostname
+        '''
+        response = self.client.get(self.url_find, headers=self.json_header,
+                                   query_string={"hostname": host})
+        return json.loads(response.data), response.status_code
+
     def test_create_host(self):
         ''' a created host shows up on subsequent requests
         Creating a host and then requesting a list of hosts has the recently
@@ -83,3 +91,14 @@ class HostTest(TestBase):
 
         _, r = self.query_ip("notanip")
         self.assertEqual(r, httplib.BAD_REQUEST)
+
+    def test_find_multiple(self):
+        ''' querying with a hostname that returns multiple hosts
+        Creating multiple hosts with similar names and querying for the common
+        part of the name returns all of the hosts.
+        '''
+        for i in range(4):
+            self.create_host(name="test" + str(i))
+
+        hosts, _ = self.query_host("test")
+        self.assertEqual(len(hosts), 4)
