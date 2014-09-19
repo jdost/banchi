@@ -28,7 +28,7 @@ class Vlan(db.Model):
     cidr = db.Column(db.Integer)
     number = db.Column(db.Integer, unique=True)
     length = db.Column(db.Integer)
-    ips = db.relationship("Ip", backref='vlan')
+    ips = db.relationship("Ip", backref='vlan', cascade="delete")
 
     def get_next(self):
         mask = ~ self.cidr

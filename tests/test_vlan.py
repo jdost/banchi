@@ -65,3 +65,21 @@ class VlanTest(TestBase):
 
         hosts = self.get_hosts()
         self.assertEqual(len(hosts), 2)
+
+    def test_delete_vlan(self):
+        ''' deleting a vlan removes the vlan and associated ips
+        Creates a vlan and an associated host, then removes the vlan, the host
+        should no longer have ips for the vlan.
+        '''
+        vlan = self.create_vlan()
+        host = self.create_host(vlans=[vlan["number"]])
+        self.assertEqual(len(host["vlans"]), 1)
+
+        response = self.client.delete(vlan["url"])
+        self.assertHasStatus(response, httplib.ACCEPTED)
+        self.assertEqual(len(self.get_vlans()), 0)
+
+        response = self.client.get(host["url"])
+        self.assertHasStatus(response, httplib.OK)
+        host = json.loads(response.data)
+        self.assertEqual(len(host['ips']), 0)

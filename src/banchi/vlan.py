@@ -55,3 +55,25 @@ def create_vlan():
 
     db.session.add(vlan)
     return vlan.__simple__(), httplib.CREATED
+
+
+@app.route(BASE_PATH + "<int:vlan_id>/", methods=["DELETE"])
+@app.route(BASE_PATH + "<vlan_name>/", methods=["DELETE"])
+@datatype
+@write_operation
+def delete_vlan(vlan_id=None, vlan_name=None):
+    ''' delete_vlan - DELETE /vlan/<vlan_id>
+        delete_vlan - DELETE /vlan/<vlan_name>
+    Removes the vlan and associated IPs
+    '''
+    vlan = None
+    if vlan_id:
+        vlan = models.Vlan.query.filter(models.Vlan.number == vlan_id).first()
+    elif vlan_name:
+        vlan = models.Vlan.query.filter(models.Vlan.name == vlan_name).first()
+
+    if not vlan:
+        return httplib.NOT_FOUND
+
+    db.session.delete(vlan)
+    return httplib.ACCEPTED
