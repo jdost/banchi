@@ -102,3 +102,17 @@ class HostTest(TestBase):
 
         hosts, _ = self.query_host("test")
         self.assertEqual(len(hosts), 4)
+
+    def test_delete(self):
+        ''' deleting a host cleans up the host and ips
+        Creates a host with associated IPs, then removes the host.  The IPs
+        should be removed (and available).
+        '''
+        self.create_vlan(number=7, name="vlan7")
+        host = self.create_host(vlans=[7])
+
+        self.assertEqual(len(self.get_hosts()), 1)
+        response = self.client.delete(host["url"])
+        self.assertHasStatus(response, httplib.ACCEPTED)
+
+        self.assertEqual(len(self.get_hosts()), 0)

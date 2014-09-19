@@ -10,6 +10,10 @@ class Ip(db.Model):
     vlan_id = db.Column(db.Integer, db.ForeignKey('vlan.id'))
     host_id = db.Column(db.Integer, db.ForeignKey('host.id'))
 
+    __mapper_args__ = {
+        "confirm_deleted_rows": False
+    }
+
     def __tuple__(self):
         name = "{}_{}_ip".format(self.host.name, self.vlan.name)
         return (name, str(self))
@@ -61,7 +65,7 @@ class Vlan(db.Model):
 class Host(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False, unique=True)
-    ips = db.relationship("Ip", backref='host')
+    ips = db.relationship("Ip", backref='host', cascade="delete")
     vlans = db.relationship("Vlan", secondary="ip", backref="hosts")
 
     def __simple__(self):

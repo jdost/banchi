@@ -65,3 +65,20 @@ def create_host():
             return httplib.PRECONDITION_FAILED
 
     return host.__simple__(), httplib.CREATED
+
+
+@app.route(BASE_PATH + "<host_name>/", methods=["DELETE"])
+@datatype
+@write_operation
+def delete_host(host_name=None):
+    ''' delete_host - DELETE /host/<host_name>
+    Attempts to find the host specified, if it exists, it and all of its IPs
+    will be deleted and an ACCEPTED will be returned, if it doesn't exist, a
+    NOT_FOUND will be returned.
+    '''
+    host = models.Host.query.filter(models.Host.name == host_name).first()
+    if not host:
+        return httplib.NOT_FOUND
+
+    db.session.delete(host)
+    return httplib.ACCEPTED
